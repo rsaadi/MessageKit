@@ -27,8 +27,6 @@ let package = Package(
     platforms: [.iOS(.v13)],
     products: [
         .library(name: "MessageKit", targets: ["MessageKit"]),
-        .plugin(name: "SwiftLintPlugin", targets: ["SwiftLintPlugin"]),
-        .plugin(name: "SwiftFormatPlugin", targets: ["SwiftFormatPlugin"]),
     ],
     dependencies: [
         .package(url: "https://github.com/nathantannar4/InputBarAccessoryView", .upToNextMajor(from: "6.1.0")),
@@ -44,45 +42,6 @@ let package = Package(
             swiftSettings: [SwiftSetting.define("IS_SPM")]
         ),
         .testTarget(name: "MessageKitTests", dependencies: ["MessageKit"]),
-
-        // MARK: - Plugins
-
-        .binaryTarget(
-            name: "SwiftLintBinary",
-            url: "https://github.com/realm/SwiftLint/releases/download/0.47.1/SwiftLintBinary-macos.artifactbundle.zip",
-            checksum: "82ef90b7d76b02e41edd73423687d9cedf0bb9849dcbedad8df3a461e5a7b555"
-        ),
-        .plugin(
-            name: "SwiftLintPlugin",
-            capability: .buildTool(),
-            dependencies: ["SwiftLintBinary"]
-        ),
-        .plugin(
-            name: "SwiftLintCommandPlugin",
-            capability: .command(
-                intent: .custom(
-                    verb: "lint",
-                    description: "Lint Swift source files"
-                )
-            ),
-            dependencies: ["SwiftLintBinary"]
-        ),
-
-        .binaryTarget(
-            name: "swiftformat",
-            url: "https://github.com/nicklockwood/SwiftFormat/releases/download/0.49.13/swiftformat.artifactbundle.zip",
-            checksum: "5ce27780dceee8714b15d53141e6dce1a8d626e970eade3c511c9ef1a0c06f40"
-        ),
-        .plugin(
-            name: "SwiftFormatPlugin",
-            capability: .command(
-                intent: .sourceCodeFormatting(),
-                permissions: [
-                    .writeToPackageDirectory(reason: "Format Swift source files"),
-                ]
-            ),
-            dependencies: ["swiftformat"]
-        ),
     ],
     swiftLanguageVersions: [.v5]
 )
